@@ -1,0 +1,34 @@
+# ===== Python virtual environment =====
+.venv/
+venv/
+env/
+
+# ===== Python cache =====
+__pycache__/
+*.py[cod]
+*.pyo
+
+# ===== Pytest / coverage =====
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ===== Python packaging =====
+build/
+dist/
+*.egg-info/
+
+# ===== FastAPI / Uvicorn =====
+*.log
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== IDE =====
+.vscode/
+.idea/
+
+# ===== Environment variables =====
+.env
+.env.*
