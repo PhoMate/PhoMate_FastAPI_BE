@@ -1,34 +1,38 @@
+from __future__ import annotations
+
 import requests
 from PIL import Image
+
 import torch
 from transformers import CLIPProcessor, CLIPModel
 from sentence_transformers import SentenceTransformer
 
+
 class Embedder:
     """
     CPU 기준 MVP.
-    이미지: openai/clip-vit-base-patch32 -> 512 dim
-    텍스트: BAAI/bge-m3 -> 보통 1024 dim
+    image: openai/clip-vit-base-patch32 -> 512 dim (normalized)
+    text:  BAAI/bge-m3 -> usually 1024 dim (normalized)
     """
+
     def __init__(self):
-        # device 설정 (추후 GPU면 "cuda")
         self.device = "cpu"
 
-        # CLIP
+        # CLIP (image)
         self.clip_model_name = "openai/clip-vit-base-patch32"
         self.clip_model = CLIPModel.from_pretrained(self.clip_model_name).to(self.device)
         self.clip_processor = CLIPProcessor.from_pretrained(self.clip_model_name)
         self.clip_model.eval()
 
-        # bge-m3
+        # bge-m3 (text)
         self.text_model_name = "BAAI/bge-m3"
         self.text_model = SentenceTransformer(self.text_model_name, device=self.device)
 
     def embed_image_url(self, image_url: str) -> list[float]:
         r = requests.get(image_url, stream=True, timeout=20)
         r.raise_for_status()
-        img = Image.open(r.raw).convert("RGB")
 
+        img = Image.open(r.raw).convert("RGB")
         inputs = self.clip_processor(images=img, return_tensors="pt")
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
