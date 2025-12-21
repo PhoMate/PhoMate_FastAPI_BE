@@ -187,3 +187,12 @@ def search_hybrid(req: HybridSearchRequest):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Search failed: {e}")
+
+@app.delete("/vectors/posts/{post_id}")
+def delete_post_vector(post_id: int):
+    try:
+        assert store is not None
+        store.delete_by_post_id(post_id)
+        return {"status": "OK", "deletedPostId": post_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Delete failed: {e}")

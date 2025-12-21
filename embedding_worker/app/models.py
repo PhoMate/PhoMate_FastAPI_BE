@@ -58,3 +58,6 @@ class SearchHit(BaseModel):
 
 class SearchResponse(BaseModel):
     hits: list[SearchHit]
+
+class DeletePostRequest(BaseModel):
+    postId: int

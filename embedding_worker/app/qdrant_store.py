@@ -95,3 +95,9 @@ class QdrantStore:
             with_vectors=False,
             query_filter=flt,
         )
+
+    def delete_by_post_id(self, post_id: int) -> None:
+        self.client.delete(
+            collection_name=self.collection,
+            points_selector=qm.PointIdsList(points=[post_id]),
+        )
