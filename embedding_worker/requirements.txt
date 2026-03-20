@@ -8,16 +8,9 @@ requests==2.32.3
 # ===== Vector DB =====
 qdrant-client==1.12.0
 
-# ===== LangChain =====
-langchain==0.3.7
-langchain-community
-langchain-qdrant
-
-# ===== ML: CLIP =====
+# ===== ML: SigLIP 2 =====
 torch
 torchvision
-transformers==4.44.2
+transformers>=4.52.0
 Pillow==10.4.0
-
-# ===== ML: Text embedding =====
-sentence-transformers==3.0.1
+sentencepiece
