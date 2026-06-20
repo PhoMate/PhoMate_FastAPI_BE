@@ -54,13 +54,12 @@ def _embed_local_image(embedder, path: Path) -> list[float]:
     inputs = embedder.processor(images=image, return_tensors="pt")
     inputs = {k: v.to(embedder.device) for k, v in inputs.items()}
     with torch.no_grad():
-        outputs = embedder.model.get_image_features(**inputs)
-    # outputs may be a tensor or a dataclass; normalise the same way embedder does
-    if hasattr(outputs, "image_embeds"):
-        feats = outputs.image_embeds
-    else:
-        feats = outputs
-    feats = feats / feats.norm(dim=-1, keepdim=True)
+        if hasattr(embedder.model, "get_image_features"):
+            outputs = embedder.model.get_image_features(**inputs)
+        else:
+            outputs = embedder.model(**inputs)
+    feats = embedder._extract_tensor(outputs)
+    feats = embedder._normalize(feats)
     return feats[0].cpu().tolist()
 
 
