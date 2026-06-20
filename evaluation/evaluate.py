@@ -122,17 +122,19 @@ def _write_per_query(
         path:  destination CSV path.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
-    # collect all query ids
-    query_ids = sorted(qrels.qrels.keys())
     rows: list[dict] = []
     for run in runs:
-        method = run.name or Path(run.run_path).stem if hasattr(run, "run_path") else "unknown"
+        method = run.name or "unknown"
+        # return_mean=False 시 ranx는 {metric: np.ndarray} 반환
+        # 배열 순서는 run.run 의 key 순서와 동일
         per_query = evaluate(qrels, run, METRICS, return_mean=False)
-        for qid in query_ids:
+        query_ids_ordered = list(run.run.keys())
+        for i, qid in enumerate(query_ids_ordered):
             row: dict = {"method": method, "query_id": qid}
             for metric in METRICS:
-                scores = per_query.get(metric, {})
-                row[metric] = f"{scores.get(qid, 0):.4f}"
+                arr = per_query.get(metric, [])
+                score = float(arr[i]) if i < len(arr) else 0.0
+                row[metric] = f"{score:.4f}"
             rows.append(row)
 
     fieldnames = ["method", "query_id"] + METRICS
