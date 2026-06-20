@@ -132,13 +132,16 @@ class MethodA(SearchMethod):
 
 class MethodAPrime(SearchMethod):
     """
-    SigLIP image embeddings searched with the query translated to English.
-    Translation implementation is TODO; configure VLM_API_KEY to enable it.
+    SigLIP image embeddings searched with an English query.
+
+    run_search.py passes query_en when available (COCO 영어 캡션 등).
+    query_en 이 없는 경우에는 _translate_ko_to_en 이 필요하지만 현재 TODO.
     """
 
     def search(self, query: str, top_k: int = cfg.TOP_K) -> list[str]:
-        english_query = _translate_ko_to_en(query)
-        vec = _get_embedder().embed_text(english_query)
+        # query 는 run_search.py 가 language 선택 후 전달한 텍스트
+        # (query_en 있으면 영어, 없으면 Korean — 후자는 VLM_API_KEY 필요)
+        vec = _get_embedder().embed_text(query)
         return _qdrant_search(cfg.EVAL_SIGLIP_COLLECTION, vec, top_k)
 
 
