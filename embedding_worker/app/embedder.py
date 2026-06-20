@@ -45,7 +45,6 @@ class Embedder:
             return outputs.pooler_output
 
         if hasattr(outputs, "last_hidden_state") and outputs.last_hidden_state is not None:
-            # [batch, seq, hidden] -> CLS/token 0 사용
             return outputs.last_hidden_state[:, 0, :]
 
         raise TypeError(f"Unsupported model output type: {type(outputs)}")
@@ -59,7 +58,6 @@ class Embedder:
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
         with torch.no_grad():
-            # 1순위: 전용 feature method
             if hasattr(self.model, "get_image_features"):
                 outputs = self.model.get_image_features(**inputs)
             else:
@@ -78,7 +76,6 @@ class Embedder:
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
         with torch.no_grad():
-            # 1순위: 전용 feature method
             if hasattr(self.model, "get_text_features"):
                 outputs = self.model.get_text_features(**inputs)
             else:
