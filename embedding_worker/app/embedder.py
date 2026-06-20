@@ -72,7 +72,7 @@ class Embedder:
         if not query:
             raise ValueError("text query is empty")
 
-        inputs = self.processor(text=[query], return_tensors="pt")
+        inputs = self.processor(text=[query], return_tensors="pt", padding="max_length")
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
         with torch.no_grad():
