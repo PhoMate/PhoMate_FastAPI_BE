@@ -1,0 +1,12 @@
+# Evaluation-only dependencies
+# Install AFTER embedding_worker/requirements.txt (torch/transformers are shared)
+#
+#   pip install -r embedding_worker/requirements.txt
+#   pip install -r evaluation/requirements.txt
+
+ranx>=0.3.5
+pandas>=2.0.0
+python-dotenv>=1.0.0
+tqdm>=4.66.0
+pytest>=8.0.0
+# openai>=1.0.0  # uncomment when A'/B/B+C are implemented
