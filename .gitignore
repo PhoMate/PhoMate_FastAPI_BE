@@ -32,3 +32,6 @@ Thumbs.db
 # ===== Environment variables =====
 .env
 .env.*
+
+# ===== Claude Code =====
+CLAUDE.md
